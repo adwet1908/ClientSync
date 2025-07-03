@@ -35,7 +35,7 @@ export const createClient = async (req, res) => {
 
 export const getAllClients = async(req, res) => {
     try {
-        const {email}
+        // const {email}
     } catch (error) {
         
     }
