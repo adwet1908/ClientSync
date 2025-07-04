@@ -7,6 +7,7 @@ import invoiceRouter from './router/invoiceRouter.js';
 import leadRouter from './router/leadRouter.js';
 import clientRouter from './router/clientRouter.js';
 import connectDB from './config/db.js';
+import projectRouter from './router/projectRouter.js';
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -21,9 +22,10 @@ app.use(cookieParser());
 
 // routers usage
 app.use('/api/auth', authRouter);
-app.use('/api/leads,', leadRouter); 
+app.use('/api/lead,', leadRouter); 
 app.use('/api/client,', clientRouter); 
 app.use('/api/invoice,', invoiceRouter); 
+app.use('/api/projec,', projectRouter); 
 
 
 app.listen(port, () => {
