@@ -16,6 +16,12 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
+// routers usage
+app.use('/api/auth', authRouter);
+app.use('/api/leads,', leadRouter); 
+app.use('/api/client,', clientRouter); 
+app.use('/api/invoice,', invoiceRouter); 
+
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
