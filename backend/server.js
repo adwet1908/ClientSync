@@ -2,16 +2,17 @@ import express from 'express';
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import 'dotenv/config';
-
+import authRouter from './router/authRouter.js';
+import invoiceRouter from './router/invoiceRouter.js';
+import leadRouter from './router/leadRouter.js';
+import clientRouter from './router/clientRouter.js';
 
 const app = express();
 const port = process.env.PORT || 5001;
 
-// basic middleware support 
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173', // Frontend URL
-    credentials: true,              // Enable cookies
+    origin: 'http://localhost:5173',
 }));
 app.use(cookieParser());
 
