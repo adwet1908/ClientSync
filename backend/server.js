@@ -6,9 +6,12 @@ import authRouter from './router/authRouter.js';
 import invoiceRouter from './router/invoiceRouter.js';
 import leadRouter from './router/leadRouter.js';
 import clientRouter from './router/clientRouter.js';
+import connectDB from './config/db.js';
 
 const app = express();
 const port = process.env.PORT || 5001;
+
+await connectDB(); 
 
 app.use(express.json());
 app.use(cors({

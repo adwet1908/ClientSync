@@ -1,4 +1,4 @@
-import Admin from "../models/admin.model";
+import Admin from "../models/admin.model.js";
 import Lead from "../models/lead.model.js";
 import Client from "../models/client.model.js";
 

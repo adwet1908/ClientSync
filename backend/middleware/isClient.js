@@ -20,3 +20,5 @@ const isClient = async (req, res, next) => {
     });
     }
 }
+
+export default isClient; 
