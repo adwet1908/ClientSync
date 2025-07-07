@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const projectSchema = mongoose.Schema(
   {
     adminId: {
-      type: Object.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Admin",
       required: true,
     },
     clientId: {
-      type: Object.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Client",
       required: true,
     },

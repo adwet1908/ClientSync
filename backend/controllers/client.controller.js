@@ -16,7 +16,7 @@ export const createClient = async (req, res) => {
       email,
       billingAddress,
       projects, // not "project"
-      adminId: req.user._id,
+      adminId: req.user.id,
     });
 
     return res.status(201).json({
@@ -25,6 +25,7 @@ export const createClient = async (req, res) => {
       newUser,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Server Error",
@@ -34,7 +35,7 @@ export const createClient = async (req, res) => {
 
 export const getAllClients = async (req, res) => {
   try {
-    const clients = await Client.find({ adminId: req.user._id });
+    const clients = await Client.find({ adminId: req.user.id });
 
     if (!clients) {
       return res.status(401).json({
@@ -66,6 +67,9 @@ export const getClientById = async (req, res) => {
         message: "Client not found.",
       });
     }
+    if (client.adminId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Access denied" });
+    }
 
     return res.status(200).json({
       success: true,
@@ -90,6 +94,9 @@ export const updateClient = async (req, res) => {
         success: false,
         message: "Client not found.",
       });
+    }
+    if (client.adminId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Access denied" });
     }
 
     const updatedClient = await Client.findByIdAndUpdate(
