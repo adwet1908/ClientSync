@@ -2,10 +2,10 @@ import Project from "../models/project.model.js";
 import Client from "../models/client.model.js";
 
 export const createProject = async (req, res) => {
-  const { name, description, clientId, status, deadline, amount } = req.body;
+  const { title, description, clientId, status, dueDate } = req.body;
 
   try {
-    if (!name || !clientId) {
+    if (!title || !clientId || !status || !dueDate) {
       return res.status(400).json({ success: false, message: "Missing required fields" });
     }
 
@@ -15,27 +15,27 @@ export const createProject = async (req, res) => {
     }
 
     const project = await Project.create({
-      name,
+      title,
       description,
-      adminId: req.user._id,
+      adminId: req.user.id,
       clientId,
-      status: status || "Pending",
-      deadline,
-      amount,
+      status,
+      dueDate,
     });
 
     return res.status(201).json({ success: true, project });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Server Error" });
+    console.log(error);
+    return res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };
 
 export const getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.find({ adminId: req.user._id });
+    const projects = await Project.find({ adminId: req.user.id });
     return res.status(200).json({ success: true, projects });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Server Error" });
+    return res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };
 
@@ -46,9 +46,14 @@ export const getProjectById = async (req, res) => {
     if (!project) {
       return res.status(404).json({ success: false, message: "Project not found" });
     }
+
+    if (project.adminId.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ success: false, message: "Unauthorized access" });
+    }
+
     return res.status(200).json({ success: true, project });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Server Error" });
+    return res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };
 
@@ -57,14 +62,19 @@ export const updateProject = async (req, res) => {
   const updates = req.body;
 
   try {
-    const updatedProject = await Project.findByIdAndUpdate(id, updates, { new: true });
-    if (!updatedProject) {
+    const project = await Project.findById(id);
+    if (!project) {
       return res.status(404).json({ success: false, message: "Project not found" });
     }
 
+    if (project.adminId.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ success: false, message: "Unauthorized access" });
+    }
+
+    const updatedProject = await Project.findByIdAndUpdate(id, updates, { new: true });
     return res.status(200).json({ success: true, updatedProject });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Server Error" });
+    return res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };
 
@@ -77,9 +87,13 @@ export const deleteProject = async (req, res) => {
       return res.status(404).json({ success: false, message: "Project not found" });
     }
 
+    if (project.adminId.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ success: false, message: "Unauthorized access" });
+    }
+
     await Project.findByIdAndDelete(id);
     return res.status(200).json({ success: true, message: "Project deleted successfully" });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Server Error" });
+    return res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };

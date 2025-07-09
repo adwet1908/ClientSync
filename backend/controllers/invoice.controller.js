@@ -24,7 +24,7 @@ export const createInvoice = async (req, res) => {
     }
 
     const invoice = await Invoice.create({
-      adminId: req.user._id,
+      adminId: req.user.id,
       clientId,
       projectId: projectId || null,
       services,
@@ -39,6 +39,7 @@ export const createInvoice = async (req, res) => {
       invoice,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Server Error",
@@ -49,7 +50,7 @@ export const createInvoice = async (req, res) => {
 // This is to fetch all invoices for a particular Admin
 export const fetchAllInvoiceForAdmin = async (req, res) => {
   try {
-    const invoice = await Invoice.find({ adminId: req.user._id });
+    const invoice = await Invoice.find({ adminId: req.user.id });
 
     if (!invoice) {
       return res.status(404).json({
@@ -98,7 +99,8 @@ export const fetchInvoiceById = async (req, res) => {
 
 // This is to get all invoices sent to a particular client
 export const fetchInvoicesByClient = async (req, res) => {
-  const {clientId} = req.body;
+  const {clientId} = req.params;
+  
   try {
     const invoices = await Invoice.find({clientId});
 
@@ -114,6 +116,7 @@ export const fetchInvoicesByClient = async (req, res) => {
       invoices,
     });
   } catch (error) {
+    console.log(error);
     return res.status(401).json({
       success: false,
       message: "Server Error",

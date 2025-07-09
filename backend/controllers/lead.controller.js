@@ -12,7 +12,7 @@ const createLead = async (req, res) => {
             });
         }
 
-        const findUser = await Lead.findOne({ email, adminId: req.user._id });
+        const findUser = await Lead.findOne({ email, adminId: req.user.id });
 
         if (findUser) {
             return res.status(409).json({
@@ -26,7 +26,7 @@ const createLead = async (req, res) => {
             email,
             phone,
             status: "New",
-            adminId: req.user._id,
+            adminId: req.user.id,
         });
 
         return res.status(201).json({
@@ -44,7 +44,7 @@ const createLead = async (req, res) => {
 
 const getAllLeads = async (req, res) => {
     try {
-        const leads = await Admin.find({ adminId: req.user._id });
+        const leads = await Lead.find({ adminId: req.user.id });
 
         if (!leads) {
             return res.status(401).json({
@@ -76,6 +76,11 @@ const getLeadById = async (req, res) => {
                 message: "Lead does not exist",
             });
         }
+
+        if (lead.adminId.toString() !== req.user.id) {
+            return res.status(403).json({ message: "Access denied" });
+        }
+
         return res.status(201).json({
             success: true,
             lead,
@@ -100,6 +105,13 @@ const updateLead = async (req, res) => {
                 success: false,
                 message: "Lead not found",
             });
+        }
+
+        if (lead.adminId.toString() !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied"
+            })
         }
 
         const updateData = await Lead.findByIdAndUpdate(
@@ -134,6 +146,13 @@ const deleteLead = async (req, res) => {
             });
         }
 
+        if (lead.adminId.toString() !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied"
+            })
+        }
+
         await Lead.findByIdAndDelete(id);
         return res.status(201).json({
             success: true,
@@ -146,8 +165,9 @@ const deleteLead = async (req, res) => {
         });
     }
 };
+
 const convertLeadToClient = async (req, res) => {
-    const { billingAddress } = req.body;
+    const { billingAddress } = req.body || {};
     const { id } = req.params;
 
     try {
@@ -160,13 +180,21 @@ const convertLeadToClient = async (req, res) => {
             });
         }
 
+        if (lead.adminId.toString() !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorized: You don't own this lead."
+            });
+        }
+
+
         const newClient = await Client.create({
             name: lead.name,
             email: lead.email,
             phone: lead.phone,
             billingAddress,
             projects: 0,
-            adminId: req.user._id,
+            adminId: req.user.id,
         });
 
 

@@ -25,9 +25,9 @@ await connectDB();
 // routers usage
 app.use('/api/auth', authRouter);
 app.use('/api/client', clientRouter); 
-app.use('/api/lead,', leadRouter); 
-app.use('/api/invoice,', invoiceRouter); 
-app.use('/api/projec,', projectRouter); 
+app.use('/api/lead', leadRouter); 
+app.use('/api/invoice', invoiceRouter); 
+app.use('/api/project', projectRouter); 
 
 
 app.listen(port, () => {

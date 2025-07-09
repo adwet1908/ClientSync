@@ -130,6 +130,9 @@ export const deleteClient = async (req, res) => {
       });
     }
 
+    if (client.adminId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Access denied" });
+    }
     await Client.findByIdAndDelete(id);
 
     return res.status(200).json({

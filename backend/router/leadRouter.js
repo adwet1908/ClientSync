@@ -12,7 +12,7 @@ import isAdmin from "../middleware/isAdmin.js";
 
 const leadRouter = express.Router();
 
-leadRouter.post('/create',  verifyToken, isAdmin, createLead);
+leadRouter.post('/create',  verifyToken, isAdmin, createLead); 
 leadRouter.get('/all', verifyToken, isAdmin, getAllLeads);
 leadRouter.get('/:id',  verifyToken, isAdmin,getLeadById);
 leadRouter.put('/:id', verifyToken, isAdmin, updateLead);
