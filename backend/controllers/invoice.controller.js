@@ -61,7 +61,7 @@ export const fetchAllInvoiceForAdmin = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      invoice,
+      message: invoice,
     });
   } catch (error) {
     return res.status(500).json({
@@ -99,10 +99,10 @@ export const fetchInvoiceById = async (req, res) => {
 
 // This is to get all invoices sent to a particular client
 export const fetchInvoicesByClient = async (req, res) => {
-  const {clientId} = req.params;
-  
+  const { clientId } = req.params;
+
   try {
-    const invoices = await Invoice.find({clientId});
+    const invoices = await Invoice.find({ clientId });
 
     if (!invoices) {
       return res.status(404).json({

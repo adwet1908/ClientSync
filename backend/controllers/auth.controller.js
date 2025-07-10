@@ -1,4 +1,3 @@
-import express from "express";
 import bcrypt, { genSalt } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Admin from "../models/admin.model.js";
@@ -106,3 +105,19 @@ export const adminLogout = async (req, res) => {
 
     return res.status(200).json({ message: "Logged out successfully" });
 };
+
+export const adminStatus = async (req, res) => {
+  try {
+    const user = await Admin.findById(req.user.id).select("-password"); 
+    return res.status(200).json({
+      success: true, 
+      user
+    })
+  } catch (error) {
+    console.log("Server Error:", error);
+    return res.status(500).json({
+      success: false, 
+      message: "Server error"
+    })
+  }
+}; 

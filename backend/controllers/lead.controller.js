@@ -55,7 +55,7 @@ const getAllLeads = async (req, res) => {
 
         return res.status(201).json({
             success: true,
-            leads,
+            message: leads,
         });
     } catch (error) {
         return res.status(500).json({

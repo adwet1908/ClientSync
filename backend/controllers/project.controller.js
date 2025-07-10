@@ -33,7 +33,7 @@ export const createProject = async (req, res) => {
 export const getAllProjects = async (req, res) => {
   try {
     const projects = await Project.find({ adminId: req.user.id });
-    return res.status(200).json({ success: true, projects });
+    return res.status(200).json({ success: true, message: projects });
   } catch (error) {
     return res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
