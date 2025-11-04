@@ -49,6 +49,7 @@ export const adminRegister = async (req, res) => {
 
 export const adminLogin = async (req, res) => {
   const { email, password } = req.body;
+  console.log(req.body);
 
   try {
     if (!email || !password) {
@@ -73,7 +74,7 @@ export const adminLogin = async (req, res) => {
     }
 
     // token generation
-    // this token is set in the cookie method 
+    // this token is set in the cookie method
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
       expiresIn: "3d",
     });

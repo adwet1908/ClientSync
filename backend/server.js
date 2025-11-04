@@ -15,6 +15,7 @@ const port = process.env.PORT || 5001;
 dotenv.config();
 
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
@@ -34,5 +35,5 @@ app.use('/api/project', projectRouter);
 
 
 app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
+  console.log(`Server started on port ${port}`);
 })

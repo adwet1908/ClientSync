@@ -15,7 +15,7 @@ const clientSchema = mongoose.Schema(
       unique: true,
       required: true,
     },
-    // Admin who owns this client
+    // Admin who has this
     adminId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Admin",
@@ -33,6 +33,26 @@ const clientSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
+
+    phone: {
+      type: Number, 
+      required: true,  
+    }, 
+    
+    industry :{
+      type: String, 
+      required: true
+    }, 
+
+    averageBudget:{
+      type: Number, 
+    },
+    website: {
+      type: String, 
+    },
+    notes:{
+      type: String, 
+    }
   },
   {
     timestamps: true, // Adds createdAt and updatedAt automatically

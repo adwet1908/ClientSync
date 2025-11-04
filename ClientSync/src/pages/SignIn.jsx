@@ -3,8 +3,13 @@ import "./SignIn.css"; // Create this file
 import api from "../services/api.js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useContext } from "react";
+import { StoreContext } from "../context/StoreContext";
 
 const SignIn = () => {
+  const { user } = useContext(StoreContext);
+
   const [state, setState] = useState("Sign Up");
   const [data, setData] = useState({
     name: "",
@@ -12,7 +17,13 @@ const SignIn = () => {
     password: "",
   });
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/home");
+    }
+  }, [navigate]);
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -25,30 +36,27 @@ const SignIn = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     console.log("form data submitted");
-    
-    if(state === 'Sign Up'){
-      const response = await api.post('/auth/admin-register', data); 
-      
-      if(response.data.success){
-        toast.success(response.data.message); 
-        navigate('/')
-        window.location.reload(); 
-      }
-      else{
-        toast.error(response.data.message); 
-      }
 
-    }
-    else if(state === 'Login'){
-      const response = await api.post('/auth/admin-login', data); 
-      
-      if(response.data.success){
-        toast.success(response.data.message); 
-        navigate('/')
-        window.location.reload(); 
+    if (state === "Sign Up") {
+      const response = await api.post("/auth/admin-register", data);
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        navigate("/");
+        window.location.reload();
+      } else {
+        toast.error(response.data.message);
       }
-      else{
-        toast.error(response.data.message); 
+    } else if (state === "Login") {
+      const response = await api.post("/auth/admin-login", data);
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        navigate("/");
+        window.location.reload();
+      } else {
+        console.log("fuckee ho gaya login mein");
+        toast.error(response.data.message);
       }
     }
   };

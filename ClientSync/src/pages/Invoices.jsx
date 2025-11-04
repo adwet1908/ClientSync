@@ -1,72 +1,53 @@
 import React, { useContext, useEffect } from "react";
 import { StoreContext } from "../context/StoreContext";
+import { NavLink } from "react-router-dom";
+import InvoicesTable from "../components/InvoicesTable";
 
-const InvoicesPage = () => {
+const Invoices = () => {
   const { invoices, fetchInvoices } = useContext(StoreContext);
 
+  // Fetch all invoices once when page loads
   useEffect(() => {
     fetchInvoices();
-  }, []);
-
-  useEffect(() => {
-    console.log(invoices);
+    if (invoices.length > 0) {
+      console.log("Invoices updated:", invoices);
+    }
   }, []);
 
   return (
-    <div className="p-6 bg-[#0a0f1a] min-h-screen text-gray-200">
+    <div className="min-h-screen bg-gradient-to-b from-[#050a15] via-[#0a1122] to-[#0e1830] text-gray-200 p-8">
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Invoices</h1>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow transition">
-          Add Invoice
-        </button>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
+        <div>
+          <h1 className="text-3xl font-bold text-white tracking-tight mb-1">
+            Invoices
+          </h1>
+          <p className="text-gray-400 text-sm">
+            Manage and track all your billing records in one place
+          </p>
+        </div>
+
+        <NavLink to="/invoice/new">
+          <button className="mt-4 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl shadow-md hover:shadow-blue-700/30 transition-all duration-300">
+            + Add Invoice
+          </button>
+        </NavLink>
       </div>
 
-      {/* Invoices List */}
-      <div className="bg-[#111827] border border-gray-700 rounded-lg p-4 shadow-md">
-        <h2 className="text-lg font-semibold text-gray-100 mb-4">All Invoices</h2>
+      {/* Invoices Table Section */}
+      <div className="bg-[#10182a]/60 border border-[#1e293b] backdrop-blur-lg rounded-2xl p-6 shadow-lg">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold text-white">All Invoices</h2>
+        </div>
 
         {invoices && invoices.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm text-left text-gray-400">
-              <thead className="text-xs uppercase bg-gray-800 text-gray-300">
-                <tr>
-                  <th className="px-4 py-3">#</th>
-                  <th className="px-4 py-3">Client</th>
-                  <th className="px-4 py-3">Amount</th>
-                  <th className="px-4 py-3">Due Date</th>
-                  <th className="px-4 py-3">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {invoices.map((invoice, index) => (
-                  <tr key={invoice.id} className="border-t border-gray-700 hover:bg-gray-900">
-                    <td className="px-4 py-3">{index + 1}</td>
-                    <td className="px-4 py-3">{invoice.clientId}</td>
-                    <td className="px-4 py-3">₹ {invoice.totalAmount}</td>
-                    <td className="px-4 py-3">{new Date(invoice.dueDate).toLocaleDateString()}</td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-semibold ${
-                          invoice.status === "Paid"
-                            ? "bg-green-600 text-white"
-                            : "bg-yellow-500 text-black"
-                        }`}
-                      >
-                        {invoice.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <InvoicesTable invoices={invoices} />
         ) : (
-          <p className="text-gray-400">No invoices found.</p>
+          <p className="text-gray-400 italic">No invoices found.</p>
         )}
       </div>
     </div>
   );
 };
 
-export default InvoicesPage;
+export default Invoices;

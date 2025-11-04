@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
-  const token = req.cookies.token; // 👈 requires cookie-parser
+  const token = req.cookies.token; // requires cookie-parser
+  // console.log("Incoming request to:", req.originalUrl);
+  // console.log("Token received:", token);
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized: No token" });

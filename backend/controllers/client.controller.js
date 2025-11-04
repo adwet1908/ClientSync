@@ -1,13 +1,13 @@
 import Client from "../models/client.model.js";
 
 export const createClient = async (req, res) => {
-  const { name, email, billingAddress, projects } = req.body;
+  const { name, email, billingAddress, phone,clientType, industry, averageBudget, website, notes } = req.body;
 
   try {
-    if (!name || !email || !billingAddress || !projects) {
+    if (!name || !email || !billingAddress || !phone || !industry || !clientType) {
       return res.status(401).json({
         success: false,
-        message: "Data missing",
+        message: "Mandatory Data missing",
       });
     }
 
@@ -15,7 +15,12 @@ export const createClient = async (req, res) => {
       name,
       email,
       billingAddress,
-      projects, // not "project"
+      phone, 
+      clientType, 
+      industry, 
+      averageBudget, 
+      website, 
+      notes, 
       adminId: req.user.id,
     });
 
@@ -84,7 +89,8 @@ export const getClientById = async (req, res) => {
 };
 
 export const updateClient = async (req, res) => {
-  const { name, email, billingAddress, projects } = req.body;
+  const { name, email, billingAddress, phone, industry, budget, website, notes } = req.body;
+  
   const { id } = req.params;
   try {
     const client = await Client.findById(id);
@@ -101,7 +107,7 @@ export const updateClient = async (req, res) => {
 
     const updatedClient = await Client.findByIdAndUpdate(
       id,
-      { name, email, billingAddress, projects },
+      { name, email, billingAddress, phone, industry, budget, website, notes },
       { new: true }
     );
 

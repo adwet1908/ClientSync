@@ -8,7 +8,7 @@ const ProtectionRoute = () => {
 
   if (loading) return <p>Loading...</p>;
 
-  return user ? <Outlet /> : <Navigate to="/register" />;
+  return user ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectionRoute;
