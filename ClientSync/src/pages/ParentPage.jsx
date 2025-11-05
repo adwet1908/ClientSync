@@ -7,7 +7,7 @@ const ParentPage = () => {
       
       {/* Title Section */}
       <h1 className="text-4xl font-bold mb-4 text-white">
-        Introducing <span className="text-indigo-500">ClientSync</span>
+        Introducing new and Updated <span className="text-indigo-500">ClientSync</span>
       </h1>
 
       {/* Subtitle / description */}
